@@ -14,12 +14,12 @@ import java.util.List;
 public class FilteringController {
 
     @GetMapping(path = "filtering")
-    public SomeBean retrieveBean(){
-        return new SomeBean("value1", "value2", "value3");
+    public StaticFilteredBean retrieveBean(){
+        return new StaticFilteredBean("value1", "value2", "value3");
     }
 
     @GetMapping(path = "filtering-list")
-    public List<SomeBean> retrieveListOfBean(){
-        return Arrays.asList(new SomeBean("value1", "value2", "value3"),  new SomeBean("value11", "value22", "value33"));
+    public List<StaticFilteredBean> retrieveListOfBean(){
+        return Arrays.asList(new StaticFilteredBean("value1", "value2", "value3"),  new StaticFilteredBean("value11", "value22", "value33"));
     }
 }
