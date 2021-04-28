@@ -1,8 +1,18 @@
 package com.zikozee.restfulwebservices.domain.user;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.links.Link;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +30,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @RestController
 @RequiredArgsConstructor
+@Api(value = "User Resource Controller", protocols = "https", description = "User Operations")
 public class UserResource {
 
     private final UserDaoServiceImpl service;
 
     //retrieveAllUsers
+    @Operation(summary = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found users",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "404", description = "Users not found",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))})
+    })
     @GetMapping(path = "users")
     public List<User> retrieveAllUsers(){
 
@@ -33,7 +51,7 @@ public class UserResource {
 
     //retrieveUSer(int id)
     @GetMapping(path = "users/{id}")
-    public EntityModel<User> retrieveUser(@PathVariable(value = "id") int id){
+    public EntityModel<User> retrieveUser(@ApiParam(name = "user_id") @PathVariable(value = "id") int id){
         var user =service.findOne(id);
         if(ObjectUtils.isEmpty(user))
             throw new UserNotFoundException("id-" + id);
